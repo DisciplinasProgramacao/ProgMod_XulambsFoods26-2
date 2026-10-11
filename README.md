@@ -33,4 +33,7 @@ A pizzaria quer ampliar seus negócios realizando _pedidos para entrega_ de pizz
   - De `4,01` até `8km`: `R$5`.
   - Acima de `8km`: `R$8`.
 
+### Melhoria: 0.41
+
+Percebendo que a inclusão da _taxa de serviço_ no valor de `10%` do valor das pizzas em um pedido local iria prejudicar a execução dos pedidos para entrega, é necessário realizar a _refatoração_ do código. Tornamos a classe `Pedido` para abstrata, com o método abstrato `precoAPagar()`. As classes filhas `PedidoLocal` e `PedidoEntrega` sobrescrevem este método com suas regras próprias.
 
