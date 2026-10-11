@@ -4,13 +4,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PedidoTest {
+public class PedidoLocalTest {
     Pedido pedido;
     Pizza pizzaVazia;
 
     @BeforeEach 
     public void setUp(){
-        pedido = new Pedido();
+        pedido = new PedidoLocal();
         pizzaVazia = new Pizza();
         pedido.adicionarPizza(pizzaVazia);
     }
