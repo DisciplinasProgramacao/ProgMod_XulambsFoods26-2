@@ -25,6 +25,8 @@
 import java.time.LocalDate;
 import java.util.LinkedList;
 
+import javax.naming.OperationNotSupportedException;
+
 public abstract class Pedido {
     private  static int ultimoPedido;
     private LocalDate data;
@@ -40,14 +42,23 @@ public abstract class Pedido {
         aberto = true;
     }
 
-    protected  boolean podeAdicionar(){
-        return aberto;
+    protected void verificarInclusao(){
+        if(!aberto)
+            throw new PedidoFechadoException(idPedido);
     }
 
+    /**
+     * 
+     * @param pizza
+     * @return
+     * @throws PedidoFechadoException
+     */
     public int adicionarPizza(Pizza pizza){
-        if(pizza != null && podeAdicionar()){
-            pizzas.add(pizza);
-        }
+        if(pizza == null)
+            throw new IllegalArgumentException("Pizza não foi criada corretamente. Não será adicionada ao pedido");
+
+        verificarInclusao();
+        pizzas.add(pizza);
         return pizzas.size();
     }
 
