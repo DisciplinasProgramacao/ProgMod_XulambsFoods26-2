@@ -5,16 +5,19 @@ public class PedidoEntrega extends Pedido{
     private double distanciaEntrega;
 
     public PedidoEntrega(double distancia){
-        super();
         if(distancia < 0.1)
-            distancia = 0.1;
+            throw new IllegalArgumentException();
+        
+        super();
         distanciaEntrega = distancia;
         taxaEntrega = ETaxaEntrega.definirEntrega(distancia);
     }
 
     @Override 
-    protected boolean podeAdicionar(){
-        return super.podeAdicionar() && pizzas.size() < MAX_PIZZAS;
+    protected void verificarInclusao(){
+        super.verificarInclusao();
+        if(pizzas.size() == MAX_PIZZAS)
+            throw new IllegalStateException();
     }
 
     @Override 

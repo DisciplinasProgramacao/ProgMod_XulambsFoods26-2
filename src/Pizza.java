@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import java.security.InvalidParameterException;
+
 /**
  * Pizza: com preço base fixo e preço final definido pela quantidade de ingredientes.
  */
@@ -115,21 +117,26 @@ public class Pizza {
      * @param quantidade Ingredientes a serem adicionados
      * @return TRUE se a quantidade for >=0 e o total <=8, FALSE para casos contrários.
      */
-	private boolean podeAdicionar(int quantidade) {
-        return quantidade >=0
-               && quantidade + quantidadeIngredientes <= MAXIMO_INGREDIENTES;
+	private void verificarIngredientes(int quantidade) {
+        if(quantidade < 0){
+            throw new InvalidParameterException("Ingredientes não podem ser negativos");
+        }
+        if(quantidade + quantidadeIngredientes > MAXIMO_INGREDIENTES){
+            throw new MaximoDeIngredientesException(MAXIMO_INGREDIENTES-quantidadeIngredientes, MAXIMO_INGREDIENTES);
+        }
     }
 
     /**
      * Tenta adicionar a quantidade de ingredientes na pizza.
-     * Em caso de valores inválidos, ignora a operação.
-     * @param quantidade Inteiro não negativo
+     * @param quantidade Inteiro não negativo. Valores negativos causam
+     * exceção de parâmetro inválido. 
+     * @throws InvalidParameterException em caso de quantidade negativa
+     * @throws IllegalStateException caso o máximo de ingredientes seja ultrapassado.
      * @return A quantatidade de adicionais na pizza após a execução do método.
      */
 	public int adicionarIngredientes(int quantidade) {
-		if(podeAdicionar(quantidade)){
-            quantidadeIngredientes += quantidade;
-        }
+		verificarIngredientes(quantidade);
+        quantidadeIngredientes += quantidade;
         return quantidadeIngredientes;
 	}
 
