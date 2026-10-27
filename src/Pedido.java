@@ -25,8 +25,6 @@
 import java.time.LocalDate;
 import java.util.LinkedList;
 
-import javax.naming.OperationNotSupportedException;
-
 public abstract class Pedido {
     private  static int ultimoPedido;
     private LocalDate data;
@@ -52,6 +50,7 @@ public abstract class Pedido {
      * @param pizza
      * @return
      * @throws PedidoFechadoException
+     * * @throws IllegalArgumentException
      */
     public int adicionarPizza(Pizza pizza){
         if(pizza == null)
