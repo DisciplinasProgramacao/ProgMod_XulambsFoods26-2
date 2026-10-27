@@ -32,7 +32,7 @@ public class XulambsApp {
 
     void cabecalho() {
         limparTela();
-        IO.println("XULAMBS PIZZA - v0.41");
+        IO.println("XULAMBS PIZZA - v0.42");
         IO.println("=====================");
         IO.println("Pizzas vendidas hoje: " +
                 Pizza.getPizzasVendidas());
@@ -142,15 +142,14 @@ public class XulambsApp {
         if (buscado != null) {
             pizza = comprarPizza();
             try {
-                buscado.adicionarPizza(pizza);
-                
-            } catch (InvalidParameterException parametroInvalido) {
-                IO.println(parametroInvalido.getMessage());
+                buscado.adicionarPizza(pizza);   
             } catch (PedidoFechadoException excecao) {
                 IO.println(excecao.getMessage());
             }catch (IllegalArgumentException e) {
                 IO.println(e.getMessage());           
-            }
+            }catch (IllegalStateException parametroInvalido) {
+                IO.println(parametroInvalido.getMessage());
+            } 
             exibirRelatorio(buscado);
         }
     }
