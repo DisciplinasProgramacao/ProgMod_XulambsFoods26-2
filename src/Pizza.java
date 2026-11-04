@@ -100,7 +100,7 @@ public class Pizza {
         cupom += String.format("\tPreço base: R$ %.2f\n", PRECO_BASE);
         cupom += String.format("\tBorda: R$ %.2f\n", borda.getValor());
         cupom += String.format("\tAdicionais: R$ %.2f\n", valorAdicionais());
-        cupom += String.format("VALOR A PAGAR: R$ %.2f", valorFinal());
+        cupom += String.format("VALOR DA PIZZA: R$ %.2f", valorFinal());
 
         return cupom;
 	}
