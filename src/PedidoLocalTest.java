@@ -12,7 +12,7 @@ public class PedidoLocalTest {
     public void setUp(){
         pedido = new PedidoLocal();
         pizzaVazia = new Pizza();
-        pedido.adicionarPizza(pizzaVazia);
+        pedido.adicionarItem(pizzaVazia);
     }
     
     @Test
@@ -20,7 +20,7 @@ public class PedidoLocalTest {
         //Arrange
          pedido.fecharPedido();
         //Act
-        int quantidade = pedido.adicionarPizza(new Pizza());
+        int quantidade = pedido.adicionarItem(new Pizza());
         //Assert
         assertEquals(1, quantidade);
     }
@@ -28,9 +28,9 @@ public class PedidoLocalTest {
     @Test
     public void adicionaPizzasEmPedidoAberto(){
         //Arrange
-         pedido.adicionarPizza(pizzaVazia);
+         pedido.adicionarItem(pizzaVazia);
         //Act
-        int quantidade = pedido.adicionarPizza(new Pizza());
+        int quantidade = pedido.adicionarItem(new Pizza());
         //Assert
         assertEquals(3, quantidade);
     }
@@ -47,7 +47,7 @@ public class PedidoLocalTest {
     public void calculaPrecoComVariasPizzas(){
         //Arrange
         Pizza comIngredientes = new Pizza(2);
-        pedido.adicionarPizza(comIngredientes);
+        pedido.adicionarItem(comIngredientes);
         //Act
         double preco = pedido.precoAPagar();
         //Assert
@@ -57,7 +57,7 @@ public class PedidoLocalTest {
     @Test 
     public void gerarRelatorioComDetalhes(){
         //Arrange
-        pedido.adicionarPizza(new Pizza());
+        pedido.adicionarItem(new Pizza());
         //Act
         String cupom = pedido.toString();
         assertTrue(

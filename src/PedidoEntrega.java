@@ -14,12 +14,12 @@ public class PedidoEntrega extends Pedido{
 
     @Override 
     protected boolean podeAdicionar(){
-        return super.podeAdicionar() && pizzas.size() < MAX_PIZZAS;
+        return super.podeAdicionar() && itens.size() < MAX_PIZZAS;
     }
 
     @Override 
     public double precoAPagar(){
-        return valorPizzas() + taxaEntrega.valorTaxa();
+        return valorItens() + taxaEntrega.valorTaxa();
     }
 
     @Override 

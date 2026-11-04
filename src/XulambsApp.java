@@ -24,7 +24,7 @@ public class XulambsApp {
 
     void cabecalho(){
         limparTela();
-        IO.println("XULAMBS PIZZA - v0.41");
+        IO.println("XULAMBS PIZZA - v0.5");
         IO.println("=====================");
         IO.println("Pizzas vendidas hoje: " +
                     Pizza.getPizzasVendidas());
@@ -40,6 +40,16 @@ public class XulambsApp {
         return lerNumero("Digite sua opção: ");
     }
 
+    private IProduto comprarSobremesa() {
+        ESobremesa[] sobremesas = ESobremesa.values();
+        cabecalho();
+        IO.println("Sobremesas Xulâmbicas:");
+        for (int i = 0; i < sobremesas.length; i++) {
+            IO.println(i+1 + " - "+sobremesas[i]);
+        }
+        int opcao = lerNumero("Sua escolha:");
+        return sobremesas[opcao-1];
+    }
     Pizza comprarPizza(){
         cabecalho();
         int adicionais; 
@@ -91,23 +101,40 @@ public class XulambsApp {
             default -> null;
         };
     }
+   
     void abrirPedido(){
         Pedido novoPedido = escolherTipoPedido();
-        String novaPizza;
+        String novoItem;
         do {
-            Pizza pizza = comprarPizza();
-            novoPedido.adicionarPizza(pizza);
-            novaPizza = IO.readln("Mais pizza? (s/n)");
-        } while (novaPizza.equals("s"));
+            IProduto produto = comprarProduto();
+            novoPedido.adicionarItem(produto);
+            novoItem = IO.readln("Algo mais? (s/n)");
+        } while (novoItem.equals("s"));
         exibirRelatorio(novoPedido);
         armazenarPedido(novoPedido);
     }
+
+    private IProduto comprarProduto() {
+        cabecalho();
+        IO.println("Escolha seu produto:");
+        IO.println("1 - Pizzas");
+        IO.println("2 - Sobremesas");
+        int escolha = lerNumero("Sua escolha: ");
+        return switch(escolha){
+            case 1 -> comprarPizza();
+            case 2 -> comprarSobremesa();
+            default -> null;
+        };
+        
+    }
+
+    
 
     void alterarPedido(){
         Pedido buscado = (Pedido)localizar();
         if(buscado != null){
             Pizza pizza = comprarPizza();
-            buscado.adicionarPizza(pizza);
+            buscado.adicionarItem(pizza);
             exibirRelatorio(buscado);
         }
     }

@@ -28,14 +28,14 @@ import java.util.LinkedList;
 public abstract class Pedido {
     private  static int ultimoPedido;
     private LocalDate data;
-    protected LinkedList<Pizza> pizzas;
+    protected LinkedList<IProduto> itens;
     private int idPedido;
     private boolean aberto;
 
     public Pedido(){
         ultimoPedido++;
         data = LocalDate.now();
-        pizzas = new LinkedList<>();
+        itens = new LinkedList<>();
         idPedido = ultimoPedido;
         aberto = true;
     }
@@ -44,11 +44,11 @@ public abstract class Pedido {
         return aberto;
     }
 
-    public int adicionarPizza(Pizza pizza){
-        if(pizza != null && podeAdicionar()){
-            pizzas.add(pizza);
+    public int adicionarItem(IProduto item){
+        if(item != null && podeAdicionar()){
+            itens.add(item);
         }
-        return pizzas.size();
+        return itens.size();
     }
 
     public void fecharPedido(){
@@ -61,24 +61,24 @@ public abstract class Pedido {
 
     public abstract double precoAPagar();
     
-    protected double valorPizzas(){
+    protected double valorItens(){
         double preco = 0d;
-        for (Pizza pizza : pizzas) {
-            preco += pizza.valorFinal();
+        for (IProduto item : itens) {
+            preco += item.valorFinal();
         }
         return preco;
     }
 
     protected String cabecalho(){
         String estado = aberto ? "aberto" : "fechado";
-        return ( String.format("Pedido nº %d - %s (%s) com %d pizzas\n", idPedido, data, estado, pizzas.size()));
+        return ( String.format("Pedido nº %d - %s (%s) com %d pizzas\n", idPedido, data, estado, itens.size()));
     }
 
     protected String detalhesPedido(){
         StringBuilder detalhes = new StringBuilder();
-        for (Pizza pizza : pizzas) {
+        for (IProduto item : itens) {
             detalhes.append(String.format("----\n%s\n", 
-                            pizza.toString()));
+                            item.toString()));
         }
         return detalhes.toString();
     }

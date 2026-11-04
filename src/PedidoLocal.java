@@ -4,11 +4,11 @@ public class PedidoLocal extends Pedido {
 
     @Override
     public double precoAPagar() {
-        return  valorPizzas() + valorServico();
+        return  valorItens() + valorServico();
     }
 
     private double valorServico() {
-        return  valorPizzas() + TAXA_SERVICO;
+        return  valorItens() + TAXA_SERVICO;
     }
 
         @Override 
