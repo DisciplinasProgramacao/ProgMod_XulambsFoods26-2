@@ -32,7 +32,7 @@ public class XulambsApp {
 
     void cabecalho() {
         limparTela();
-        IO.println("XULAMBS PIZZA - v0.41");
+        IO.println("XULAMBS PIZZA - v0.42");
         IO.println("=====================");
         IO.println("Pizzas vendidas hoje: " +
                 Pizza.getPizzasVendidas());
