@@ -24,7 +24,7 @@ public class XulambsApp {
 
     void cabecalho(){
         limparTela();
-        IO.println("XULAMBS PIZZA - v0.5");
+        IO.println("XULAMBS FOODS - v0.6");
         IO.println("=====================");
         IO.println("Pizzas vendidas hoje: " +
                     Pizza.getPizzasVendidas());
@@ -50,17 +50,39 @@ public class XulambsApp {
         int opcao = lerNumero("Sua escolha:");
         return sobremesas[opcao-1];
     }
+   
+    private IPersonalizavel incluirIngredientes(IPersonalizavel item){
+        int adicionais = lerNumero("Quantos ingredientes? ");
+        try {
+            item.adicionarIngredientes(adicionais);    
+        } catch (IllegalArgumentException e) {
+            IO.println(e.getMessage());
+        } catch (IllegalStateException e){
+            IO.println(e.getMessage());
+        }
+        return item;
+    }
+
+    private IPersonalizavel comprarSanduiche() {
+        cabecalho();
+        IO.println("Comprando um Xulambs Super Burger:");
+        
+        Sanduiche sanduiche = new Sanduiche();
+
+        String querCombo = IO.readln("Quer combo com fritas?(s/n)");
+        if(querCombo.toLowerCase().equals("s"))
+            sanduiche.setCombo(true);
+
+        return sanduiche;
+    }
+
     Pizza comprarPizza(){
         cabecalho();
-        int adicionais; 
         Pizza novaPizza = new Pizza();
 
         EBorda borda = escolherBorda();
         novaPizza.adicionarBorda(borda);
         
-        adicionais = lerNumero("Quantos ingredientes? ");
-        novaPizza.adicionarIngredientes(adicionais);
-
         exibirRelatorio(novaPizza);
         return novaPizza;
     }
@@ -76,7 +98,6 @@ public class XulambsApp {
         int escolha = lerNumero("Digite sua opção: ");
         return bordas[escolha-1];
     }
-
    
     void armazenarPedido(Pedido pedido){
         if(pedido != null)
@@ -118,17 +139,27 @@ public class XulambsApp {
         cabecalho();
         IO.println("Escolha seu produto:");
         IO.println("1 - Pizzas");
-        IO.println("2 - Sobremesas");
+        IO.println("2 - Sanduíches");
+        IO.println("3 - Sobremesas");
         int escolha = lerNumero("Sua escolha: ");
         return switch(escolha){
-            case 1 -> comprarPizza();
-            case 2 -> comprarSobremesa();
+            case 1,2 -> comprarPersonalizavel(escolha);
+            case 3 -> comprarSobremesa();
             default -> null;
         };
-        
     }
-
     
+    
+
+    private IProduto comprarPersonalizavel(int escolha) {
+        IPersonalizavel item = switch(escolha){
+            case 1 -> comprarPizza();
+            case 2 -> comprarSanduiche();
+            default -> null;
+        };
+        incluirIngredientes(item);
+        return (IProduto)item;
+    }
 
     void alterarPedido(){
         Pedido buscado = (Pedido)localizar();
