@@ -25,7 +25,7 @@
 /**
  * Pizza: com preço base fixo e preço final definido pela quantidade de ingredientes.
  */
-public class Pizza implements IProduto{
+public class Pizza implements IProduto, IPersonalizavel{
     private static final double PRECO_BASE;
 	private static final int MAXIMO_INGREDIENTES;
 	private static final double VALOR_INGREDIENTE;
@@ -127,6 +127,7 @@ public class Pizza implements IProduto{
      * @param quantidade Inteiro não negativo
      * @return A quantatidade de adicionais na pizza após a execução do método.
      */
+    @Override 
 	public int adicionarIngredientes(int quantidade) {
 		if(podeAdicionar(quantidade)){
             quantidadeIngredientes += quantidade;
