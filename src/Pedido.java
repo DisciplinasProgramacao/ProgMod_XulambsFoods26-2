@@ -31,6 +31,7 @@ public abstract class Pedido {
     protected LinkedList<IProduto> itens;
     private int idPedido;
     private boolean aberto;
+    private double desconto;
 
     public Pedido(){
         ultimoPedido++;
@@ -44,6 +45,14 @@ public abstract class Pedido {
         return aberto;
     }
 
+    public double aplicarDesconto(double valor){
+        if(valor < 0 )
+            throw new IllegalArgumentException("Desconto não pode ser negativo");
+        if(desconto != 0)
+            throw new IllegalStateException("Desconto já foi aplicado");
+        desconto = valor;
+        return desconto;
+    }
     public int adicionarItem(IProduto item){
         if(item != null && podeAdicionar()){
             itens.add(item);
@@ -66,7 +75,7 @@ public abstract class Pedido {
         for (IProduto item : itens) {
             preco += item.valorFinal();
         }
-        return preco;
+        return preco - desconto;
     }
 
     protected String cabecalho(){
@@ -80,6 +89,8 @@ public abstract class Pedido {
             detalhes.append(String.format("----\n%s\n", 
                             item.toString()));
         }
+        detalhes.append(String.format("\nDESCONTO: %.2f\n",desconto));
+        
         return detalhes.toString();
     }
 

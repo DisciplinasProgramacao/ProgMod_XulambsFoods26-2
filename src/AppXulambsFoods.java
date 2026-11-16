@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-public class XulambsApp {
+public class AppXulambsFoods {
     private List<Pedido> listaPedidos;
     private  List<Cliente> listaClientes;
 
@@ -21,7 +21,7 @@ public class XulambsApp {
 
     void config(){
         listaClientes = GeradorClientes.gerarClientes();
-        listaPedidos = GeradorPedidos.gerarPedidos(LocalDate.now().minusDays(100), LocalDate.now(), listaClientes, 12);
+        listaPedidos = GeradorPedidos.gerarPedidos(LocalDate.now().minusDays(100), LocalDate.now(), listaClientes, 8);
         listaPedidos = new LinkedList<>();
 
     }
@@ -42,6 +42,7 @@ public class XulambsApp {
         IO.println("4 - Encerrar pedido");
         IO.println("===========================");
         IO.println("5 - Lista clientes");
+        IO.println("6 - Atualizar categorias");
         IO.println("0 - Sair");
         return lerNumero("Digite sua opção: ");
     }
@@ -175,7 +176,7 @@ public class XulambsApp {
     }
 
     void alterarPedido(){
-        Pedido buscado = (Pedido)localizar();
+        Pedido buscado = (Pedido)localizar(listaPedidos);
         if(buscado != null){
             Pizza pizza = comprarPizza();
             buscado.adicionarItem(pizza);
@@ -184,27 +185,30 @@ public class XulambsApp {
     }
 
     void relatorioPedido(){
-        Pedido buscado = (Pedido)localizar();
+        Pedido buscado = (Pedido)localizar(listaPedidos);
         if(buscado != null){
             exibirRelatorio(buscado);
         }
     }
 
      void encerrarPedido(){
-        Pedido buscado = (Pedido)localizar();
+        Pedido buscado = (Pedido)localizar(listaPedidos);
+        Cliente cliente = (Cliente)localizar(listaClientes);
         if(buscado != null){
             buscado.fecharPedido();
+            if(cliente != null)
+                cliente.registrarPedido(buscado);
             exibirRelatorio(buscado);
         }
     }
 
-    Object localizar(){
+    Object localizar(List<?> lista){
         cabecalho();
-        IO.println("LOCALIZAÇÃO DE PEDIDOS\n");
-        int codigo = lerNumero("Código do pedido: ");
+        IO.println("LOCALIZAÇÃO\n");
+        int codigo = lerNumero("Código: ");
         Object localizado = null;
-        for (int i = 0; i < listaPedidos.size() && localizado == null; i++) {
-            Object candidato = listaPedidos.get(i);
+        for (int i = 0; i < lista.size() && localizado == null; i++) {
+            Object candidato = lista.get(i);
             if(candidato.hashCode() == codigo){
                 localizado = candidato;
             }
@@ -228,6 +232,14 @@ public class XulambsApp {
     //     IO.println("=====================");
     // }
 
+    void atualizarClientes(){
+        cabecalho();
+        for (Cliente cliente : listaClientes) {
+            cliente.atualizarCategoria();
+        }
+        IO.println("Categorias de fidelidade atualizadas!");
+    }
+
     void main(){
         int opcao;
         config();
@@ -239,6 +251,7 @@ public class XulambsApp {
                 case 3 -> relatorioPedido();
                 case 4 -> encerrarPedido();
                 case 5 -> listarClientes();
+                case 6 -> atualizarClientes();
                 case 0 -> IO.println("Encerrando!");
                 default -> IO.println("Opção inválida");
             }   

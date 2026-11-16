@@ -14,5 +14,10 @@ public class XulambsSenior implements  IFidelidade{
         numeroDaCompra++;
         return desconto;    
     }
+
+    @Override 
+    public String toString(){
+        return "Xulambs Sênior";
+    }
     
 }

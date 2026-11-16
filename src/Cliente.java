@@ -25,6 +25,7 @@ public class Cliente {
         
         pedidos.addLast(novoPedido);
         double desconto = categoria.descontoPedido(novoPedido);
+        novoPedido.aplicarDesconto(desconto);
         return pedidos.size();
     }
 
@@ -55,7 +56,7 @@ public class Cliente {
 
     @Override 
     public String toString(){
-        return String.format("%s (%d): Total Gasto: R$ %.2f", 
-            nome, id, totalGasto());
+        return String.format("%s (%d): Total Gasto: R$ %.2f - Fidelidade %s", 
+            nome, id, totalGasto(), categoria);
     }
 }
