@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GeradorPedidos {
-    static Random sorteio = new Random(42);
+    static final Random sorteio = new Random(42);
 
     static List<Pedido> gerarPedidos(LocalDate dataInicio, LocalDate dataFim, List<Cliente> clientes, int fator){
         int quantidade = clientes.size() * fator;

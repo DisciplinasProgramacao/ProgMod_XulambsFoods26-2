@@ -33,7 +33,7 @@ public class Cliente {
     }
 
     public String relatorioPedidos(){
-        StringBuilder relatorio = new StringBuilder();
+        StringBuilder relatorio = new StringBuilder(toString()+"\n---------------\n");
         for (Pedido pedido : pedidos) {
             relatorio.append(pedido + "\n\n");
         }

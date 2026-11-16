@@ -1,7 +1,8 @@
 import java.util.Random;
 
 public class GeradorProdutos {
-    static Random sorteio = new Random(42);
+    static final Random sorteio = new Random(42);
+   
     static IProduto criar(int tipo){
         return switch(tipo){
             case 1 -> criarPizza();
