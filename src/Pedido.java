@@ -27,7 +27,7 @@ import java.util.LinkedList;
 
 public abstract class Pedido {
     private  static int ultimoPedido;
-    private LocalDate data;
+    protected  LocalDate data;
     protected LinkedList<IProduto> itens;
     private int idPedido;
     private boolean aberto;

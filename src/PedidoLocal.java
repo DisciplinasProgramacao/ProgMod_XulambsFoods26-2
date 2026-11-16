@@ -1,7 +1,14 @@
+import java.time.LocalDate;
+
 public class PedidoLocal extends Pedido {
 
     private static final double TAXA_SERVICO = 0.1;
 
+    public PedidoLocal(LocalDate data){
+        super();
+        this.data = data;
+    }
+    
     @Override
     public double precoAPagar() {
         return  valorItens() + valorServico();

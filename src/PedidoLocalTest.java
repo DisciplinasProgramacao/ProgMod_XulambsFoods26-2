@@ -1,6 +1,8 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,7 @@ public class PedidoLocalTest {
 
     @BeforeEach 
     public void setUp(){
-        pedido = new PedidoLocal();
+        pedido = new PedidoLocal(LocalDate.now());
         pizzaVazia = new Pizza();
         pedido.adicionarItem(pizzaVazia);
     }

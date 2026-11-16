@@ -1,8 +1,10 @@
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
 public class XulambsApp {
     private List<Pedido> listaPedidos;
+    private  List<Cliente> listaClientes;
 
     void limparTela() {
         IO.print("\033[H\033[2J");
@@ -18,13 +20,15 @@ public class XulambsApp {
     }
 
     void config(){
+        listaClientes = GeradorClientes.gerarClientes();
+        listaPedidos = GeradorPedidos.gerarPedidos(LocalDate.now().minusDays(100), LocalDate.now(), listaClientes, 12);
         listaPedidos = new LinkedList<>();
 
     }
 
     void cabecalho(){
         limparTela();
-        IO.println("XULAMBS FOODS - v0.6");
+        IO.println("XULAMBS FOODS - v0.7");
         IO.println("=====================");
         IO.println("Pizzas vendidas hoje: " +
                     Pizza.getPizzasVendidas());
@@ -36,10 +40,19 @@ public class XulambsApp {
         IO.println("2 - Alterar pedido");
         IO.println("3 - Relatório de um pedido");
         IO.println("4 - Encerrar pedido");
+        IO.println("===========================");
+        IO.println("5 - Lista clientes");
         IO.println("0 - Sair");
         return lerNumero("Digite sua opção: ");
     }
 
+    private void listarClientes(){
+        cabecalho();
+        IO.println("Lista de clientes Xulambs:");
+        for (Cliente cliente : listaClientes) {
+            IO.println(cliente); 
+        }
+    }
     private IProduto comprarSobremesa() {
         ESobremesa[] sobremesas = ESobremesa.values();
         cabecalho();
@@ -117,7 +130,7 @@ public class XulambsApp {
         IO.println("2 - Para entrega");
         int escolha = lerNumero("Digite sua opção: ");
         return switch (escolha) {
-            case 1 -> new PedidoLocal();
+            case 1 -> new PedidoLocal(LocalDate.now());
             case 2 -> criarPedidoEntrega();
             default -> null;
         };
@@ -225,6 +238,7 @@ public class XulambsApp {
                 case 2 -> alterarPedido();
                 case 3 -> relatorioPedido();
                 case 4 -> encerrarPedido();
+                case 5 -> listarClientes();
                 case 0 -> IO.println("Encerrando!");
                 default -> IO.println("Opção inválida");
             }   
