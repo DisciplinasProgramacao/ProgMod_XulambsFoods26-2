@@ -4,6 +4,7 @@ import java.util.List;
 public class Cliente {
     private int id;
     private String nome;
+    private IFidelidade categoria;
     private List<Pedido> pedidos;
 
     public Cliente(String nome, int id){
@@ -15,13 +16,20 @@ public class Cliente {
         this.nome = nome;
         this.id = id;
         pedidos = new LinkedList<>();
+        categoria = new XulambsJunior();
     }
 
     public int registrarPedido(Pedido novoPedido){
         if(novoPedido == null)
             throw new NullPointerException();
+        
         pedidos.addLast(novoPedido);
-        return  pedidos.size();
+        double desconto = categoria.descontoPedido(novoPedido);
+        return pedidos.size();
+    }
+
+    public void atualizarCategoria(){
+        categoria = IFidelidade.definirCategoria(pedidos);
     }
 
     public double totalGasto(){
