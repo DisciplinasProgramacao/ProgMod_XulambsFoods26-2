@@ -34,15 +34,13 @@ public class GeradorProdutos {
         return s;
     }
 
-    static Bebida criarBebida(){
+    static EBebida criarBebida(){
         int pos = sorteio.nextInt(EBebida.values().length);
-        EBebida bebida = EBebida.values()[pos];
-        return new Bebida(bebida);
+        return EBebida.values()[pos];
     }
 
     static ESobremesa criarSobremesa(){
         int pos = sorteio.nextInt(ESobremesa.values().length);
-        ESobremesa sobremesa = ESobremesa.values()[pos];
-        return sobremesa;
+        return ESobremesa.values()[pos];
     }
 }
