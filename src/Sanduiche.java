@@ -36,11 +36,14 @@ public class Sanduiche implements IProduto, IPersonalizavel {
     
     @Override 
     public String toString(){
-        StringBuilder cupom = new StringBuilder("Sanduíche");
-        cupom.append(String.format("\t Valor base: R$ %.2f", VALOR_BASE));
-        cupom.append(String.format("\t %d adicionais: R$ %.2f", adicionais, adicionais*VALOR_ADICIONAL));
-        cupom.append(String.format("\t Combo: R$ %.2f", (combo)?VALOR_COMBO:0));
-        cupom.append(String.format("\t TOTAL: R$ %.2f", valorFinal()));
+        StringBuilder cupom = new StringBuilder("Sanduíche com "+adicionais+" ingredientes");
+        String ehCombo = combo? "e combo com fritas." : ".";
+        cupom.append(ehCombo+"\n");
+        cupom.append(String.format("\tValor base: R$ %.2f\n", VALOR_BASE));
+        cupom.append(String.format("\t%d adicionais: R$ %.2f\n", adicionais, adicionais*VALOR_ADICIONAL));
+        if(combo)
+            cupom.append(String.format("\tCombo: R$ %.2f\n", VALOR_COMBO));
+        cupom.append(String.format("TOTAL: R$ %.2f", valorFinal()));
         return  cupom.toString();
     }
 }

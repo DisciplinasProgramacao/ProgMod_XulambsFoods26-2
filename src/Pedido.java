@@ -27,10 +27,11 @@ import java.util.LinkedList;
 
 public abstract class Pedido {
     private  static int ultimoPedido;
-    private LocalDate data;
+    protected  LocalDate data;
     protected LinkedList<IProduto> itens;
     private int idPedido;
     private boolean aberto;
+    private double desconto;
 
     public Pedido(){
         ultimoPedido++;
@@ -45,20 +46,20 @@ public abstract class Pedido {
             throw new PedidoFechadoException(idPedido);
     }
 
-    /**
-     * 
-     * @param pizza
-     * @return
-     * @throws PedidoFechadoException
-     * * @throws IllegalArgumentException
-     */
-    public int adicionarPizza(Pizza pizza){
-        if(pizza == null)
-            throw new IllegalArgumentException("Pizza não foi criada corretamente. Não será adicionada ao pedido");
-
-        verificarInclusao();
-        pizzas.add(pizza);
-        return pizzas.size();
+    public double aplicarDesconto(double valor){
+        if(valor < 0 )
+            throw new IllegalArgumentException("Desconto não pode ser negativo");
+        if(desconto != 0)
+            throw new IllegalStateException("Desconto já foi aplicado");
+        desconto = valor;
+        return desconto;
+    }
+    
+    public int adicionarItem(IProduto item){
+       verificarInclusao();
+        itens.add(item);
+        
+        return itens.size();
     }
 
     public void fecharPedido(){
@@ -71,6 +72,10 @@ public abstract class Pedido {
 
     public abstract double precoAPagar();
     
+    protected double getDesconto(){
+        return desconto;
+    }
+
     protected double valorItens(){
         double preco = 0d;
         for (IProduto item : itens) {
@@ -81,7 +86,7 @@ public abstract class Pedido {
 
     protected String cabecalho(){
         String estado = aberto ? "aberto" : "fechado";
-        return ( String.format("Pedido nº %d - %s (%s) com %d pizzas\n", idPedido, data, estado, itens.size()));
+        return ( String.format("Pedido nº %d - %s (%s) com %d itens\n", idPedido, data, estado, itens.size()));
     }
 
     protected String detalhesPedido(){
@@ -90,8 +95,11 @@ public abstract class Pedido {
             detalhes.append(String.format("----\n%s\n", 
                             item.toString()));
         }
-      detalhes.append(String.format("~~~~~~~~\nPRODUTOS: R$ %.2f", 
-                            valorPizzas()));      
+
+        detalhes.append(String.format("\nVALOR ITENS: R$ %.2f",valorItens()));
+        detalhes.append(String.format("\nDESCONTO: R$ -%.2f",desconto));
+        
+        
         return detalhes.toString();
     }
 

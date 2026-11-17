@@ -16,13 +16,13 @@ public class PedidoEntrega extends Pedido{
     @Override 
     protected void verificarInclusao(){
         super.verificarInclusao();
-        if(pizzas.size() == MAX_PIZZAS)
+        if(itens.size() == MAX_PIZZAS)
             throw new IllegalStateException();
     }
 
     @Override 
     public double precoAPagar(){
-        return valorItens() + taxaEntrega.valorTaxa();
+        return valorItens() + taxaEntrega.valorTaxa() - getDesconto();
     }
 
     @Override 

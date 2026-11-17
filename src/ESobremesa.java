@@ -5,6 +5,7 @@ public enum ESobremesa implements IProduto{
 
     private double valor;
     private String descricao;
+    
     ESobremesa(String nome, double preco){
         descricao = nome;
         valor = preco;
@@ -17,7 +18,7 @@ public enum ESobremesa implements IProduto{
 
     @Override 
     public String toString(){
-        return String.format("%s - R$ %.2f", descricao, valor);
+        return String.format("%s\nTOTAL: R$ %.2f", descricao, valor);
     }
 
     
