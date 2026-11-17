@@ -10,20 +10,13 @@ public class AppXulambsFoods {
         IO.print("\033[H\033[2J");
     }
 
-    void pausa() {
+    void pausa(){
         IO.readln("Digite <ENTER> para continuar");
         limparTela();
     }
 
-    int lerNumero(String mensagem) {
-        int retorno;
-        try {
-            retorno = Integer.parseInt(IO.readln(mensagem));
-        } catch (NumberFormatException excecao) {
-            IO.println(excecao.getMessage());
-            retorno = -1;
-        }
-        return retorno;
+    int lerNumero(String mensagem){
+        return Integer.parseInt(IO.readln(mensagem));
     }
 
     void config(){
@@ -31,12 +24,12 @@ public class AppXulambsFoods {
         listaPedidos = GeradorPedidos.gerarPedidos(LocalDate.now().minusDays(20), LocalDate.now(), listaClientes, 10);
     }
 
-    void cabecalho() {
+    void cabecalho(){
         limparTela();
         IO.println("XULAMBS FOODS - v0.7");
         IO.println("=====================");
         IO.println("Pizzas vendidas hoje: " +
-                Pizza.getPizzasVendidas());
+                    Pizza.getPizzasVendidas());
     }
 
     int exibirMenu() {
@@ -59,39 +52,55 @@ public class AppXulambsFoods {
             IO.println(cliente); 
         }
     }
-    
     private IProduto comprarSobremesa() {
         ESobremesa[] sobremesas = ESobremesa.values();
         cabecalho();
-        int adicionais;
+        IO.println("Sobremesas Xulâmbicas:");
+        for (int i = 0; i < sobremesas.length; i++) {
+            IO.println(i+1 + " - "+sobremesas[i]);
+        }
+        int opcao = lerNumero("Sua escolha:");
+        return sobremesas[opcao-1];
+    }
+   
+    private IPersonalizavel incluirIngredientes(IPersonalizavel item){
+        int adicionais = lerNumero("Quantos ingredientes? ");
+        try {
+            item.adicionarIngredientes(adicionais);    
+        } catch (IllegalArgumentException e) {
+            IO.println(e.getMessage());
+        } catch (IllegalStateException e){
+            IO.println(e.getMessage());
+        }
+        return item;
+    }
+
+    private IPersonalizavel comprarSanduiche() {
+        cabecalho();
+        IO.println("Comprando um Xulambs Super Burger:");
+        
+        Sanduiche sanduiche = new Sanduiche();
+
+        String querCombo = IO.readln("Quer combo com fritas?(s/n)");
+        if(querCombo.toLowerCase().equals("s"))
+            sanduiche.setCombo(true);
+
+        return sanduiche;
+    }
+
+    Pizza comprarPizza(){
+        cabecalho();
         Pizza novaPizza = new Pizza();
 
         EBorda borda = escolherBorda();
         novaPizza.adicionarBorda(borda);
-
-        adicionais = lerNumero("Quantos ingredientes? ");
-        try {
-            novaPizza.adicionarIngredientes(adicionais);
-        } catch (InvalidParameterException e) {
-            IO.println(e.getMessage());
-            pausa();
-            return comprarSobremesa();
-        } catch (MaximoDeIngredientesException maisDoQueOMaximo) {
-            IO.println(maisDoQueOMaximo.getMessage());
-            String completar = IO.readln("Deseja completar a pizza com o máximo possível(1) ou cancelar(2)? ");
-            if (completar.toLowerCase().equals("1"))
-                maisDoQueOMaximo.completarPizza(novaPizza);
-            else
-                novaPizza = null;
-        }
-
+        
         exibirRelatorio(novaPizza);
         return novaPizza;
     }
 
-    EBorda escolherBorda() {
+    EBorda escolherBorda(){
         EBorda[] bordas = EBorda.values();
-        EBorda bordaEscolhida = EBorda.TRADICIONAL;;
         int i = 1;
         IO.println("Escolha sua borda: ");
         for (EBorda eBorda : bordas) {
@@ -99,28 +108,21 @@ public class AppXulambsFoods {
             i++;
         }
         int escolha = lerNumero("Digite sua opção: ");
-        try {
-            bordaEscolhida = bordas[escolha - 1];
-        } catch (IndexOutOfBoundsException e) {
-            IO.println("Valor inválido. Escolha novamente (obrigatório para comprar uma pizza.");
-            return  escolherBorda();
-        }
-
-        return bordaEscolhida;
+        return bordas[escolha-1];
     }
-
-    void armazenarPedido(Pedido pedido) {
-        if (pedido != null)
+   
+    void armazenarPedido(Pedido pedido){
+        if(pedido != null)
             listaPedidos.add(pedido);
     }
 
-    PedidoEntrega criarPedidoEntrega() {
+    PedidoEntrega criarPedidoEntrega(){
         String dist = IO.readln("Qual a distância da entrega? ");
         double distancia = Double.parseDouble(dist);
         return new PedidoEntrega(distancia);
     }
-
-    Pedido escolherTipoPedido() {
+    
+    Pedido escolherTipoPedido(){
         cabecalho();
         IO.println("Escolha o tipo do pedido: ");
         IO.println("1 - Local ");
@@ -132,19 +134,15 @@ public class AppXulambsFoods {
             default -> null;
         };
     }
-
-    void abrirPedido() {
+   
+    void abrirPedido(){
         Pedido novoPedido = escolherTipoPedido();
         String novoItem;
         do {
-            Pizza pizza = comprarPizza();
-            try {
-                novoPedido.adicionarPizza(pizza);           
-            } catch (IllegalArgumentException e) {
-                IO.println(e.getMessage());           
-            }
-            novaPizza = IO.readln("Mais pizza? (s/n)");
-        } while (novaPizza.toLowerCase().equals("s"));
+            IProduto produto = comprarProduto();
+            novoPedido.adicionarItem(produto);
+            novoItem = IO.readln("Algo mais? (s/n)");
+        } while (novoItem.equals("s"));
         exibirRelatorio(novoPedido);
         armazenarPedido(novoPedido);
     }
@@ -176,7 +174,7 @@ public class AppXulambsFoods {
     }
 
     void alterarPedido(){
-        Pedido buscado = (Pedido)localizar(listaPedidos);
+        Pedido buscado = (Pedido)localizar(listaPedidos, "pedido");
         if(buscado != null){
             Pizza pizza = comprarPizza();
             buscado.adicionarItem(pizza);
@@ -185,15 +183,15 @@ public class AppXulambsFoods {
     }
 
     void relatorioPedido(){
-        Pedido buscado = (Pedido)localizar(listaPedidos);
+        Pedido buscado = (Pedido)localizar(listaPedidos, "pedido");
         if(buscado != null){
             exibirRelatorio(buscado);
         }
     }
 
      void encerrarPedido(){
-        Pedido buscado = (Pedido)localizar(listaPedidos);
-        Cliente cliente = (Cliente)localizar(listaClientes);
+        Pedido buscado = (Pedido)localizar(listaPedidos, "pedido");
+        Cliente cliente = (Cliente)localizar(listaClientes, "cliente");
         if(buscado != null){
             buscado.fecharPedido();
             if(cliente != null)
@@ -202,9 +200,8 @@ public class AppXulambsFoods {
         }
     }
 
-    Object localizar(List<?> lista){
+    Object localizar(List<?> lista, String classe){
         cabecalho();
-        String classe = lista.getFirst().getClass().getName();
         IO.println("LOCALIZAÇÃO\n");
         int codigo = lerNumero("Código do "+classe+": ");
         Object localizado = null;
@@ -214,16 +211,16 @@ public class AppXulambsFoods {
                 localizado = candidato;
             }
         }
-        return localizado;
+        return localizado;            
     }
 
-    void exibirRelatorio(Object objeto) {
+    void exibirRelatorio(Object objeto){
         cabecalho();
-        IO.println();
-        String mensagem = "";
-        if (objeto != null)
+        IO.println("RELATÓRIO:\n");
+        String mensagem = "Objeto não encontrado";
+        if(objeto != null)
             mensagem = objeto.toString();
-
+       
         IO.println(mensagem);
     }
 
@@ -255,8 +252,8 @@ public class AppXulambsFoods {
                 case 6 -> atualizarClientes();
                 case 0 -> IO.println("Encerrando!");
                 default -> IO.println("Opção inválida");
-            }
-            pausa();
+            }   
+            pausa(); 
         } while (opcao != 0);
     }
 }
