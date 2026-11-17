@@ -8,7 +8,7 @@ public class PedidoLocal extends Pedido {
     }
 
     private double valorServico() {
-        return  valorPizzas() + TAXA_SERVICO;
+        return  valorPizzas() * TAXA_SERVICO;
     }
 
         @Override 
@@ -18,7 +18,7 @@ public class PedidoLocal extends Pedido {
         cupom.append(detalhesPedido()+"\n");
         
         cupom.append(String.format("SERVIÇO: R$ %.2f\n", 
-                            precoAPagar()));
+                            valorServico()));
         cupom.append(String.format("VALOR DO PEDIDO: R$ %.2f", 
                             precoAPagar()));
 

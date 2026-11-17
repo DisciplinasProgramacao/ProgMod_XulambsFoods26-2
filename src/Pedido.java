@@ -90,6 +90,8 @@ public abstract class Pedido {
             detalhes.append(String.format("----\n%s\n", 
                             pizza.toString()));
         }
+      detalhes.append(String.format("~~~~~~~~\nPRODUTOS: R$ %.2f", 
+                            valorPizzas()));      
         return detalhes.toString();
     }
 
