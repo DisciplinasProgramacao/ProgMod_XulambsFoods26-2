@@ -37,3 +37,6 @@ A pizzaria quer ampliar seus negócios realizando _pedidos para entrega_ de pizz
 
 Percebendo que a inclusão da _taxa de serviço_ no valor de `10%` do valor das pizzas em um pedido local iria prejudicar a execução dos pedidos para entrega, é necessário realizar a _refatoração_ do código. Tornamos a classe `Pedido` para abstrata, com o método abstrato `precoAPagar()`. As classes filhas `PedidoLocal` e `PedidoEntrega` sobrescrevem este método com suas regras próprias.
 
+### Melhoria: 0.42
+
+Com o objetivo de tornar o fluxo de execução mais seguro, foram adicionadas algumas exceções nas classes de `Pizza` e `Pedidos`. O app foi atualizado com tratamento parcial de exceções.

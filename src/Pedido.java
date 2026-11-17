@@ -40,15 +40,25 @@ public abstract class Pedido {
         aberto = true;
     }
 
-    protected  boolean podeAdicionar(){
-        return aberto;
+    protected void verificarInclusao(){
+        if(!aberto)
+            throw new PedidoFechadoException(idPedido);
     }
 
-    public int adicionarItem(IProduto item){
-        if(item != null && podeAdicionar()){
-            itens.add(item);
-        }
-        return itens.size();
+    /**
+     * 
+     * @param pizza
+     * @return
+     * @throws PedidoFechadoException
+     * * @throws IllegalArgumentException
+     */
+    public int adicionarPizza(Pizza pizza){
+        if(pizza == null)
+            throw new IllegalArgumentException("Pizza não foi criada corretamente. Não será adicionada ao pedido");
+
+        verificarInclusao();
+        pizzas.add(pizza);
+        return pizzas.size();
     }
 
     public void fecharPedido(){
@@ -80,6 +90,8 @@ public abstract class Pedido {
             detalhes.append(String.format("----\n%s\n", 
                             item.toString()));
         }
+      detalhes.append(String.format("~~~~~~~~\nPRODUTOS: R$ %.2f", 
+                            valorPizzas()));      
         return detalhes.toString();
     }
 
