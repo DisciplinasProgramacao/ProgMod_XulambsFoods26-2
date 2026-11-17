@@ -21,9 +21,7 @@ public class AppXulambsFoods {
 
     void config(){
         listaClientes = GeradorClientes.gerarClientes();
-        listaPedidos = GeradorPedidos.gerarPedidos(LocalDate.now().minusDays(100), LocalDate.now(), listaClientes, 8);
-        listaPedidos = new LinkedList<>();
-
+        listaPedidos = GeradorPedidos.gerarPedidos(LocalDate.now().minusDays(20), LocalDate.now(), listaClientes, 10);
     }
 
     void cabecalho(){
@@ -204,8 +202,9 @@ public class AppXulambsFoods {
 
     Object localizar(List<?> lista){
         cabecalho();
+        String classe = lista.getFirst().getClass().getName();
         IO.println("LOCALIZAÇÃO\n");
-        int codigo = lerNumero("Código: ");
+        int codigo = lerNumero("Código do "+classe+": ");
         Object localizado = null;
         for (int i = 0; i < lista.size() && localizado == null; i++) {
             Object candidato = lista.get(i);

@@ -70,17 +70,21 @@ public abstract class Pedido {
 
     public abstract double precoAPagar();
     
+    protected double getDesconto(){
+        return desconto;
+    }
+
     protected double valorItens(){
         double preco = 0d;
         for (IProduto item : itens) {
             preco += item.valorFinal();
         }
-        return preco - desconto;
+        return preco;
     }
 
     protected String cabecalho(){
         String estado = aberto ? "aberto" : "fechado";
-        return ( String.format("Pedido nº %d - %s (%s) com %d pizzas\n", idPedido, data, estado, itens.size()));
+        return ( String.format("Pedido nº %d - %s (%s) com %d itens\n", idPedido, data, estado, itens.size()));
     }
 
     protected String detalhesPedido(){
@@ -89,7 +93,10 @@ public abstract class Pedido {
             detalhes.append(String.format("----\n%s\n", 
                             item.toString()));
         }
-        detalhes.append(String.format("\nDESCONTO: %.2f\n",desconto));
+
+        detalhes.append(String.format("\nVALOR ITENS: R$ %.2f",valorItens()));
+        detalhes.append(String.format("\nDESCONTO: R$ -%.2f",desconto));
+        
         
         return detalhes.toString();
     }

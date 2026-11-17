@@ -19,7 +19,7 @@ public class PedidoEntrega extends Pedido{
 
     @Override 
     public double precoAPagar(){
-        return valorItens() + taxaEntrega.valorTaxa();
+        return valorItens() + taxaEntrega.valorTaxa() - getDesconto();
     }
 
     @Override 
