@@ -122,7 +122,7 @@ public class XulambsApp {
 
     void abrirPedido() {
         Pedido novoPedido = escolherTipoPedido();
-        String novaPizza;
+        String novoItem;
         do {
             Pizza pizza = comprarPizza();
             try {
