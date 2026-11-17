@@ -1,29 +1,28 @@
-import java.text.NumberFormat;
+public enum EBebida implements  IProduto{
 
-public enum EBebida{
-
-    ÁGUA_COM_GAS(4),
-    CHÁ_COM_GAS(6),
-    SUCO(9),
-    TAÇA_DE_VINHO(15);
+    ÁGUA_DA_CASA(0, "Água da casa"),
+    ÁGUA_COM_GAS(4, "Água com gás"),
+    CHÁ_COM_GAS(6, "Chá com gás"),
+    SUCO(9, "Suco natural"),
+    TAÇA_DE_VINHO(15, "Taça de vinho");
 
     private String nome;
     private double valor;
 
-    EBebida(double preco){
-        nome = this.name().toLowerCase().replace("_", " ");
+    EBebida(double preco, String desc){
+        nome = desc;
         valor = preco;
     }
     
     
-    public double valorAPagar() {
-       return valor;
+    @Override
+    public double valorFinal() {
+        return valor;
     }
 
-    @Override
+    @Override 
     public String toString(){
-        NumberFormat moeda = NumberFormat.getCurrencyInstance();
-        return nome+": "+moeda.format(valor);
+        return String.format("%s\nTOTAL: R$ %.2f", nome, valor);
     }
     
 }
